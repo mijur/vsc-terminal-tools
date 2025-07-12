@@ -10,10 +10,14 @@ on:
       - '.gitignore'
       - 'LICENSE'
 
+permissions:
+  contents: write  # Required to create releases and upload assets
+  actions: read    # Required for workflow access
+
 jobs:
   pre-release:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     
     steps:
     - name: Checkout
@@ -53,11 +57,9 @@ jobs:
     - name: Package extension
       run: npm run package
 
-    - name: Create VSIX package
-      run: vsce package
-
     - name: Create pre-release
       uses: actions/create-release@v1
+      id: create_release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
@@ -70,9 +72,12 @@ jobs:
         draft: false
         prerelease: true
 
-    - name: Upload VSIX artifact
-      uses: actions/upload-artifact@v4
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        name: pre-release-vsix
-        path: ./copilot-terminal-tools-${{ steps.get_version.outputs.PRE_VERSION }}.vsix
-        retention-days: 30
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./copilot-terminal-tools-${{ steps.get_version.outputs.PRE_VERSION }}.vsix
+        asset_name: copilot-terminal-tools-${{ steps.get_version.outputs.PRE_VERSION }}.vsix
+        asset_content_type: application/zip

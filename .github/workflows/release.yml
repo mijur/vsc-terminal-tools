@@ -1,12 +1,13 @@
 name: Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 permissions:
-  contents: write
-  releases: write
+  contents: write  # Required to create releases and upload assets
+  actions: read    # Required for workflow access
 
 jobs:
   publish:
@@ -39,20 +40,28 @@ jobs:
     - name: Package extension
       run: npm run package
 
-    - name: Create VSIX package
-      run: vsce package
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      id: create_release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.get_version.outputs.VERSION }}
+        draft: false
+        prerelease: false
 
-    - name: Upload VSIX to release
+    - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        upload_url: ${{ github.event.release.upload_url }}
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: ./copilot-terminal-tools-${{ steps.get_version.outputs.VERSION }}.vsix
         asset_name: copilot-terminal-tools-${{ steps.get_version.outputs.VERSION }}.vsix
         asset_content_type: application/zip
 
+    # Optional: Publish to VS Code Marketplace
     - name: Publish to VS Code Marketplace
-      env:
-        VSCE_PAT: ${{ secrets.VSCE_PAT }}
-      run: vsce publish --packagePath ./copilot-terminal-tools-${{ steps.get_version.outputs.VERSION }}.vsix
+      run: vsce publish -p ${{ secrets.VSCE_PAT }}
+      if: ${{ !contains(github.ref, 'beta') }}
