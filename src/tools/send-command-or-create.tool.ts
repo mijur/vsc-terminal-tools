@@ -1,19 +1,19 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
-import { SendCommandOrCreateParameters } from '../types/tool.parameters';
+import { SendCommandOrCreateParameters as SendCommandParameters } from '../types/tool.parameters';
 import { terminalManager } from '../managers/terminal.manager';
 
-export class SendCommandOrCreateTool extends BaseTool<SendCommandOrCreateParameters> {
-    public readonly ID = 'terminal-tools_sendCommandOrCreate';
+export class SendCommandTool extends BaseTool<SendCommandParameters> {
+    public readonly ID = 'terminal-tools_sendCommand';
 
-    prepareInvocation(options: vscode.LanguageModelToolInvocationPrepareOptions<SendCommandOrCreateParameters>, token: vscode.CancellationToken): vscode.ProviderResult<vscode.PreparedToolInvocation> {
+    prepareInvocation(options: vscode.LanguageModelToolInvocationPrepareOptions<SendCommandParameters>, token: vscode.CancellationToken): vscode.ProviderResult<vscode.PreparedToolInvocation> {
         const captureMode = options.input.captureOutput ? ' (with output capture)' : '';
         return {
             invocationMessage: `Sending command to terminal '${options.input.terminalName}': ${options.input.command}${captureMode}`
         };
     }
 
-    async invoke(options: vscode.LanguageModelToolInvocationOptions<SendCommandOrCreateParameters>, token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult> {
+    async invoke(options: vscode.LanguageModelToolInvocationOptions<SendCommandParameters>, token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult> {
         const { terminalName, command, cwd, shellPath, captureOutput } = options.input;
 
         if (captureOutput) {

@@ -5,7 +5,7 @@ export class TerminalChatIntegration {
 	static register(context: vscode.ExtensionContext) {
 		const terminalToolsParticipant = new TerminalToolsParticipant();
 		const chatParticipant = vscode.chat.createChatParticipant('terminal-tools', terminalToolsParticipant.handleRequest.bind(terminalToolsParticipant));
-		chatParticipant.iconPath = vscode.Uri.joinPath(context.extensionUri, 'terminal-icon.svg');
+		chatParticipant.iconPath = vscode.Uri.joinPath(context.extensionUri, 'resources/terminal-icon.svg');
 		chatParticipant.followupProvider = {
 			provideFollowups(result: vscode.ChatResult, context: vscode.ChatContext, token: vscode.CancellationToken) {
 				return [

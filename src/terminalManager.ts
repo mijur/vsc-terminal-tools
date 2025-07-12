@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { registerLanguageModelTools, terminalManager as toolsTerminalManager } from './languageModelTools';
+import { terminalManager as toolsTerminalManager } from './languageModelTools';
 
 export interface NamedTerminal {
 	terminal: vscode.Terminal;

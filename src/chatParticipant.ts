@@ -33,13 +33,13 @@ export class TerminalToolsParticipant {
 		// Tool: Create Terminal
 		this.tools.push({
 			name: 'createTerminal',
-			description: 'Create a new named terminal',
+			description: 'Create a new named terminal. Use descriptive names like: dev-server, build, test, package-manager, git, docker, database, cloud, general, scripts',
 			schema: {
 				type: 'object',
 				properties: {
 					name: {
 						type: 'string',
-						description: 'Name for the new terminal'
+						description: 'Name for the new terminal. Use descriptive names that reflect the terminal\'s purpose (e.g., dev-server, build, test, package-manager, git, docker, database, cloud, general, scripts)'
 					}
 				},
 				required: ['name']
@@ -57,18 +57,18 @@ export class TerminalToolsParticipant {
 
 		// Tool: Send Command or Create
 		this.tools.push({
-			name: 'sendCommandOrCreate',
-			description: 'Send a command to a named terminal, creating it if it doesn\'t exist',
+			name: 'sendCommand',
+			description: 'Send a command to a named terminal, creating it if it doesn\'t exist. This is the PRIMARY tool for command execution. Use named terminals like: dev-server, build, test, package-manager, git, docker, database, cloud, general, scripts.',
 			schema: {
 				type: 'object',
 				properties: {
 					terminalName: {
 						type: 'string',
-						description: 'Name of the terminal to send command to (will be created if it doesn\'t exist)'
+						description: 'Name of the terminal to send command to (will be created if it doesn\'t exist). Use descriptive names like: dev-server, build, test, package-manager, git, docker, database, cloud, general, scripts'
 					},
 					command: {
 						type: 'string',
-						description: 'Command to execute in the terminal'
+						description: 'Command to execute in the terminal. Use platform-appropriate commands (PowerShell for Windows, bash/zsh for Unix-like systems)'
 					},
 					cwd: {
 						type: 'string',
@@ -87,6 +87,30 @@ export class TerminalToolsParticipant {
 					return `Sent command "${params.command}" to terminal "${params.terminalName}"`;
 				} catch (error) {
 					return `Failed to send command: ${error}`;
+				}
+			}
+		});
+
+		// Tool: Read Terminal
+		this.tools.push({
+			name: 'readTerminal',
+			description: 'Read and return the visible output from a named terminal. Note: VS Code\'s Terminal API has limitations and may not capture all terminal content.',
+			schema: {
+				type: 'object',
+				properties: {
+					terminalName: {
+						type: 'string',
+						description: 'Name of the terminal to read output from'
+					}
+				},
+				required: ['terminalName']
+			},
+			handler: async (params: { terminalName: string }) => {
+				try {
+					await vscode.commands.executeCommand('terminal-tools.readTerminal');
+					return `Read output from terminal: ${params.terminalName}`;
+				} catch (error) {
+					return `Failed to read terminal output: ${error}`;
 				}
 			}
 		});
@@ -178,7 +202,6 @@ export class TerminalToolsParticipant {
 		stream: vscode.ChatResponseStream,
 		token: vscode.CancellationToken
 	): Promise<vscode.ChatResult> {
-		
 		const prompt = request.prompt;
 		
 		// Parse the request to understand what the user wants
@@ -200,8 +223,17 @@ export class TerminalToolsParticipant {
 			stream.markdown('Use the "Rename Terminal" command from the command palette to interactively select and rename a terminal.');
 		} else if (prompt.includes('delete') && prompt.includes('terminal')) {
 			stream.markdown('Use the "Delete Terminal" command from the command palette to interactively select and delete a terminal.');
+		} else if (prompt.includes('help') || prompt.includes('guide') || prompt.includes('best practices')) {
+			this.showTerminalToolsGuide(stream);
 		} else {
-			stream.markdown(`## Terminal Tools Available Commands
+			this.showBasicHelp(stream);
+		}
+
+		return { metadata: { command: '' } };
+	}
+
+	private showBasicHelp(stream: vscode.ChatResponseStream) {
+		stream.markdown(`## Terminal Tools Available Commands
 
 I can help you manage named terminals in VS Code. Here are the available commands:
 
@@ -219,9 +251,86 @@ I can help you manage named terminals in VS Code. Here are the available command
 - "Rename a terminal"
 - "Delete a terminal"
 
-You can access these through the Command Palette (Ctrl+Shift+P) or by asking me directly!`);
-		}
+💡 **Tip**: Ask for "terminal tools guide" to see detailed best practices and recommended usage patterns!
 
-		return { metadata: { command: '' } };
+You can access these through the Command Palette (Ctrl+Shift+P) or by asking me directly!`);
+	}
+
+	private showTerminalToolsGuide(stream: vscode.ChatResponseStream) {
+		stream.markdown(`# Terminal Tools Extension Guide
+
+## Overview
+The Terminal Tools extension provides advanced terminal management through dedicated tools. **Always prefer using terminal tools over generic commands** for better process management and continuity.
+
+## Available Tools
+- **\`terminal-tools_createTerminal\`**: Creates a new terminal with a specified name
+- **\`terminal-tools_sendCommand\`**: Sends a command to a named terminal (creates if needed) 
+- **\`terminal-tools_readTerminal\`**: Reads output from a named terminal
+- **\`terminal-tools_renameTerminal\`**: Renames an existing terminal
+- **\`terminal-tools_deleteTerminal\`**: Deletes a named terminal
+- **\`terminal-tools_cancelCommand\`**: Sends Ctrl+C to interrupt running commands
+
+## Recommended Terminal Operation Flow
+1. **Use named terminals for process continuity**: Create specific named terminals for each operation type
+2. **Primary command tool**: Use \`terminal-tools_sendCommand\` - it creates terminals if needed then executes commands
+3. **Monitor terminal state**: Use \`terminal-tools_readTerminal\` to check process status
+4. **Clean up**: Use \`terminal-tools_cancelCommand\` and \`terminal-tools_deleteTerminal\` for cleanup
+
+## Recommended Named Terminal Patterns
+
+### Development Workflows
+- **\`dev-server\`**: Development servers (\`npm run dev\`, \`python manage.py runserver\`, \`cargo run\`) - keep running
+- **\`build\`**: Build operations (\`npm run build\`, \`cargo build\`, \`dotnet build\`) - reuse for all builds
+- **\`test\`**: Testing operations (\`npm test\`, \`pytest\`, \`cargo test\`) - reuse for all testing
+
+### Package Management
+- **\`package-manager\`**: Dependency management:
+  - Node.js: \`npm install\`, \`yarn add\`, \`pnpm install\`
+  - Python: \`pip install\`, \`conda install\`, \`poetry install\`
+  - Rust: \`cargo add\`, \`cargo update\`
+  - .NET: \`dotnet add package\`, \`nuget install\`
+
+### Version Control & Infrastructure
+- **\`git\`**: Git operations (\`git add\`, \`git commit\`, \`git push\`, \`git pull\`)
+- **\`docker\`**: Container operations (\`docker build\`, \`docker run\`, \`docker-compose up\`)
+- **\`database\`**: Database operations (\`psql\`, \`mysql\`, \`mongo\`, \`sqlite3\`)
+- **\`cloud\`**: Cloud CLI operations (\`aws\`, \`gcloud\`, \`az\`, \`kubectl\`)
+
+### General Purpose
+- **\`general\`**: File system operations and miscellaneous tasks
+- **\`scripts\`**: Custom script execution and automation
+
+## File Operations (RECOMMENDED)
+Use terminal tools for file system operations with platform-appropriate commands:
+
+### Windows PowerShell
+- Delete: \`Remove-Item\`
+- Move/Rename: \`Move-Item\`
+- Directory listing: \`Get-ChildItem\`
+- Create directory: \`New-Item -ItemType Directory\`
+
+### Unix/Linux/macOS
+- Delete: \`rm\`, \`rmdir\`
+- Move/Rename: \`mv\`
+- Directory listing: \`ls\`
+- Create directory: \`mkdir\`
+
+**Always use the \`general\` terminal for file operations unless a specific terminal is more appropriate.**
+
+## Best Practices
+1. **Terminal Naming**: Use descriptive, consistent names reflecting the terminal's purpose
+2. **Command Organization**: Group related commands in appropriate named terminals
+3. **Resource Management**: Clean up long-running processes when no longer needed
+4. **Error Handling**: Use \`terminal-tools_readTerminal\` to monitor execution and handle errors
+5. **Background Processes**: Use dedicated terminals for services that need continuous running
+
+## Cross-Platform Considerations
+- **Windows**: PowerShell (default), Command Prompt, Git Bash, WSL
+- **macOS**: Zsh (default), Bash, Fish
+- **Linux**: Bash (common), Zsh, Fish, Dash
+- **Path Separators**: Windows uses \`\\\` or \`/\` (PowerShell accepts both), Unix-like uses \`/\`
+- **Environment Variables**: Windows \`$env:VAR\` (PowerShell) or \`%VAR%\` (CMD), Unix-like \`$VAR\`
+
+This approach ensures better process management, continuity, and organization compared to generic terminal commands!`);
 	}
 }

@@ -6,7 +6,7 @@
   "publisher": "MiJur",
   "author": "MiJur",
   "license": "MIT",
-  "icon": "terminal-icon.png",
+  "icon": "resources/terminal-icon.png",
   "homepage": "https://github.com/mijur/vsc-terminal-tools#readme",
   "repository": {
     "type": "git",
@@ -76,7 +76,7 @@
         "name": "terminal-tools_listTerminals",
         "displayName": "List Named Terminals",
         "userDescription": "List all named terminals in the workspace",
-        "modelDescription": "Lists all currently named terminals in VS Code with their creation timestamps and status",
+        "modelDescription": "Lists all currently named terminals in VS Code with their creation timestamps and status. Use this to check existing terminals before creating new ones.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "listTerminals",
         "icon": "terminal",
@@ -94,7 +94,7 @@
         "name": "terminal-tools_createTerminal",
         "displayName": "Create Named Terminal",
         "userDescription": "Create a new named terminal",
-        "modelDescription": "Creates a new terminal with a specified name. The terminal can optionally be created with a specific shell or working directory",
+        "modelDescription": "Creates a new terminal with a specified name. Always prefer using terminal tools over generic run_in_terminal commands for better process management.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "createTerminal",
         "icon": "add",
@@ -125,12 +125,12 @@
         }
       },
       {
-        "name": "terminal-tools_sendCommandOrCreate",
+        "name": "terminal-tools_sendCommand",
         "displayName": "Send Command to Terminal (Create if Needed)",
         "userDescription": "Send a command to a named terminal, creating it if it doesn't exist",
-        "modelDescription": "Sends a command to execute in a specific named terminal. If the terminal doesn't exist, it will automatically create it with the specified name and optional shell/working directory settings, then execute the command.",
+        "modelDescription": "Sends a command to execute in a specific named terminal. If the terminal doesn't exist, it will automatically create it with the specified name and optional shell/working directory settings, then execute the command. THIS IS THE PRIMARY TOOL FOR COMMAND EXECUTION - always prefer this over generic run_in_terminal commands. Use recommended terminal names: 'dev-server' for development servers (npm run dev, python manage.py runserver, cargo run), 'build' for build operations (npm run build, cargo build, dotnet build), 'test' for testing (npm test, pytest, cargo test), 'package-manager' for dependency management (npm install, pip install, cargo add), 'git' for version control operations, 'docker' for containers, 'database' for DB operations, 'cloud' for cloud CLI, 'general' for file operations (use platform-appropriate commands: Windows PowerShell Remove-Item/Move-Item, Unix/Linux rm/mv), 'scripts' for automation. Group related commands in appropriate named terminals for better process management and continuity.",
         "canBeReferencedInPrompt": true,
-        "toolReferenceName": "sendCommandOrCreate",
+        "toolReferenceName": "sendCommand",
         "icon": "play",
         "tags": [
           "terminal",
@@ -165,10 +165,51 @@
         }
       },
       {
+        "name": "terminal-tools_executeCommandWithOutput",
+        "displayName": "Execute Command with Output Capture",
+        "userDescription": "Execute a command in a named terminal and capture its output",
+        "modelDescription": "Execute a command in a named terminal and capture its output, error messages, and execution details. Always prefer using terminal tools over generic commands for better process management.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "executeCommandWithOutput",
+        "icon": "play",
+        "tags": [
+          "terminal",
+          "command",
+          "execute",
+          "output",
+          "capture"
+        ],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "terminalName": {
+              "type": "string",
+              "description": "The name of the target terminal to execute the command in (will be created if it doesn't exist)"
+            },
+            "command": {
+              "type": "string",
+              "description": "Command to execute and capture output from"
+            },
+            "cwd": {
+              "type": "string",
+              "description": "Working directory for the command execution (optional)"
+            },
+            "shellPath": {
+              "type": "string",
+              "description": "Path to the shell executable for command execution (optional)"
+            }
+          },
+          "required": [
+            "terminalName",
+            "command"
+          ]
+        }
+      },
+      {
         "name": "terminal-tools_renameTerminal",
         "displayName": "Rename Terminal",
         "userDescription": "Rename a named terminal",
-        "modelDescription": "Renames an existing named terminal to a new name",
+        "modelDescription": "Renames an existing named terminal to a new name.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "renameTerminal",
         "icon": "edit",
@@ -198,7 +239,7 @@
         "name": "terminal-tools_deleteTerminal",
         "displayName": "Delete Terminal",
         "userDescription": "Delete a named terminal",
-        "modelDescription": "Deletes a named terminal, disposing of the terminal instance",
+        "modelDescription": "Deletes a named terminal, disposing of the terminal instance. Use this for proper cleanup when terminals are no longer needed.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "deleteTerminal",
         "icon": "trash",
@@ -224,7 +265,7 @@
         "name": "terminal-tools_cancelCommand",
         "displayName": "Cancel Command in Terminal",
         "userDescription": "Send a cancel keypress (Ctrl+C) to a named terminal",
-        "modelDescription": "Sends a cancel signal (Ctrl+C) to interrupt any running command in the specified named terminal",
+        "modelDescription": "Sends a cancel signal (Ctrl+C on Windows/Linux, Cmd+C on macOS) to interrupt any running command in the specified named terminal.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "cancelCommand",
         "icon": "stop",

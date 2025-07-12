@@ -17,7 +17,7 @@ export class ListTerminalsTool extends BaseTool<ListTerminalsParameters> {
         
         if (terminals.length === 0) {
             return new vscode.LanguageModelToolResult([
-                new vscode.LanguageModelTextPart('No named terminals found.')
+                new vscode.LanguageModelTextPart('No named terminals found. Use terminal-tools_sendCommand to create and execute commands.')
             ]);
         }
 
