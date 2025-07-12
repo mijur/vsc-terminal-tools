@@ -2,7 +2,7 @@
   "name": "copilot-terminal-tools",
   "displayName": "Copilot Terminal Tools",
   "description": "VS Code extension for managing named terminals with GitHub Copilot integration",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "MiJur",
   "author": "MiJur",
   "license": "MIT",
