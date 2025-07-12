@@ -2,7 +2,7 @@
   "name": "copilot-terminal-tools",
   "displayName": "Copilot Terminal Tools",
   "description": "VS Code extension for managing named terminals with GitHub Copilot integration",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "publisher": "MiJur",
   "author": "MiJur",
   "license": "MIT",
@@ -61,14 +61,6 @@
       {
         "command": "terminal-tools.readTerminal",
         "title": "Terminal Tools: Read Terminal Output"
-      }
-    ],
-    "chatParticipants": [
-      {
-        "id": "terminal-tools",
-        "name": "terminal-tools",
-        "description": "Manage named terminals in VS Code",
-        "isSticky": true
       }
     ],
     "languageModelTools": [

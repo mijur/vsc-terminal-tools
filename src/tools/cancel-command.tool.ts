@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
 import { CancelCommandParameters } from '../types/tool.parameters';
-import { terminalManager } from '../managers/terminal.manager';
+import { terminalManager } from '../terminalManager';
 
 export class CancelCommandTool extends BaseTool<CancelCommandParameters> {
     public readonly ID = 'terminal-tools_cancelCommand';

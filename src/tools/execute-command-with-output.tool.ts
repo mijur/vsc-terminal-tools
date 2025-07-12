@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
 import { ExecuteCommandWithOutputParameters } from '../types/tool.parameters';
-import { terminalManager } from '../managers/terminal.manager';
+import { terminalManager } from '../terminalManager';
 
 export class ExecuteCommandWithOutputTool extends BaseTool<ExecuteCommandWithOutputParameters> {
     public readonly ID = 'terminal-tools_executeCommandWithOutput';

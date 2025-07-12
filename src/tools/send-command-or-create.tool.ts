@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
 import { SendCommandOrCreateParameters as SendCommandParameters } from '../types/tool.parameters';
-import { terminalManager } from '../managers/terminal.manager';
+import { terminalManager } from '../terminalManager';
 
-export class SendCommandTool extends BaseTool<SendCommandParameters> {
+export class SendCommandOrCreateTool extends BaseTool<SendCommandParameters> {
     public readonly ID = 'terminal-tools_sendCommand';
 
     prepareInvocation(options: vscode.LanguageModelToolInvocationPrepareOptions<SendCommandParameters>, token: vscode.CancellationToken): vscode.ProviderResult<vscode.PreparedToolInvocation> {

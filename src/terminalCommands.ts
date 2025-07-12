@@ -72,7 +72,7 @@ export class TerminalCommands {
 		if (!selectedTerminal) { return; }
 		const command = await vscode.window.showInputBox({ prompt: 'Enter command to send', placeHolder: 'ls -la' });
 		if (!command) { return; }
-		const result = terminalManager.sendCommand(selectedTerminal, command);
+		const result = terminalManager.sendCommandOrCreate(selectedTerminal, command);
 		if (result.success) {
 			vscode.window.showInformationMessage(result.message);
 		} else {

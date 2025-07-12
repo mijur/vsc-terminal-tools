@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
 import { RenameTerminalParameters } from '../types/tool.parameters';
-import { terminalManager } from '../managers/terminal.manager';
+import { terminalManager } from '../terminalManager';
 
 export class RenameTerminalTool extends BaseTool<RenameTerminalParameters> {
     public readonly ID = 'terminal-tools_renameTerminal';

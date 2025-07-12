@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { BaseTool } from './base.tool';
 import { ReadTerminalParameters } from '../types/tool.parameters';
-import { terminalManager } from '../managers/terminal.manager';
+import { terminalManager } from '../terminalManager';
 
 export class ReadTerminalTool extends BaseTool<ReadTerminalParameters> {
     public readonly ID = 'terminal-tools_readTerminal';
