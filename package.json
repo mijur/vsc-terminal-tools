@@ -1,0 +1,241 @@
+{
+  "name": "terminal-tools",
+  "displayName": "Terminal Tools",
+  "description": "VS Code extension for managing named terminals with GitHub Copilot integration",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.102.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "terminal-tools.listTerminals",
+        "title": "Terminal Tools: List Named Terminals"
+      },
+      {
+        "command": "terminal-tools.createTerminal",
+        "title": "Terminal Tools: Create Named Terminal"
+      },
+      {
+        "command": "terminal-tools.renameTerminal",
+        "title": "Terminal Tools: Rename Terminal"
+      },
+      {
+        "command": "terminal-tools.sendCommand",
+        "title": "Terminal Tools: Send Command to Terminal (Create if Needed)"
+      },
+      {
+        "command": "terminal-tools.deleteTerminal",
+        "title": "Terminal Tools: Delete Terminal"
+      },
+      {
+        "command": "terminal-tools.cancelCommand",
+        "title": "Terminal Tools: Cancel Command in Terminal"
+      },
+      {
+        "command": "terminal-tools.readTerminal",
+        "title": "Terminal Tools: Read Terminal Output"
+      }
+    ],
+    "chatParticipants": [
+      {
+        "id": "terminal-tools",
+        "name": "terminal-tools",
+        "description": "Manage named terminals in VS Code",
+        "isSticky": true
+      }
+    ],
+    "languageModelTools": [
+      {
+        "name": "terminal-tools_listTerminals",
+        "displayName": "List Named Terminals",
+        "userDescription": "List all named terminals in the workspace",
+        "modelDescription": "Lists all currently named terminals in VS Code with their creation timestamps and status",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "listTerminals",
+        "icon": "terminal",
+        "tags": ["terminal", "list", "terminals"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {}
+        }
+      },
+      {
+        "name": "terminal-tools_createTerminal",
+        "displayName": "Create Named Terminal",
+        "userDescription": "Create a new named terminal",
+        "modelDescription": "Creates a new terminal with a specified name. The terminal can optionally be created with a specific shell or working directory",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "createTerminal",
+        "icon": "add",
+        "tags": ["terminal", "create", "new"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name for the new terminal"
+            },
+            "cwd": {
+              "type": "string",
+              "description": "Working directory for the terminal (optional)"
+            },
+            "shellPath": {
+              "type": "string",
+              "description": "Path to the shell executable (optional)"
+            }
+          },
+          "required": ["name"]
+        }
+      },
+      {
+        "name": "terminal-tools_sendCommandOrCreate",
+        "displayName": "Send Command to Terminal (Create if Needed)",
+        "userDescription": "Send a command to a named terminal, creating it if it doesn't exist",
+        "modelDescription": "Sends a command to execute in a specific named terminal. If the terminal doesn't exist, it will automatically create it with the specified name and optional shell/working directory settings, then execute the command.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "sendCommandOrCreate",
+        "icon": "play",
+        "tags": ["terminal", "command", "execute", "create"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "terminalName": {
+              "type": "string",
+              "description": "The name of the terminal to send the command to (will be created if it doesn't exist)"
+            },
+            "command": {
+              "type": "string", 
+              "description": "The command to execute in the terminal"
+            },
+            "cwd": {
+              "type": "string",
+              "description": "Working directory for the terminal if it needs to be created (optional)"
+            },
+            "shellPath": {
+              "type": "string",
+              "description": "Path to the shell executable if the terminal needs to be created (optional)"
+            }
+          },
+          "required": ["terminalName", "command"]
+        }
+      },
+      {
+        "name": "terminal-tools_renameTerminal",
+        "displayName": "Rename Terminal",
+        "userDescription": "Rename a named terminal",
+        "modelDescription": "Renames an existing named terminal to a new name",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "renameTerminal",
+        "icon": "edit",
+        "tags": ["terminal", "rename"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "oldName": {
+              "type": "string",
+              "description": "The current name of the terminal"
+            },
+            "newName": {
+              "type": "string",
+              "description": "The new name for the terminal"
+            }
+          },
+          "required": ["oldName", "newName"]
+        }
+      },
+      {
+        "name": "terminal-tools_deleteTerminal",
+        "displayName": "Delete Terminal",
+        "userDescription": "Delete a named terminal",
+        "modelDescription": "Deletes a named terminal, disposing of the terminal instance",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "deleteTerminal",
+        "icon": "trash",
+        "tags": ["terminal", "delete", "remove"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the terminal to delete"
+            }
+          },
+          "required": ["name"]
+        }
+      },
+      {
+        "name": "terminal-tools_cancelCommand",
+        "displayName": "Cancel Command in Terminal",
+        "userDescription": "Send a cancel keypress (Ctrl+C) to a named terminal",
+        "modelDescription": "Sends a cancel signal (Ctrl+C) to interrupt any running command in the specified named terminal",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "cancelCommand",
+        "icon": "stop",
+        "tags": ["terminal", "cancel", "interrupt", "ctrl+c"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "terminalName": {
+              "type": "string",
+              "description": "The name of the terminal to send the cancel signal to"
+            }
+          },
+          "required": ["terminalName"]
+        }
+      },
+      {
+        "name": "terminal-tools_readTerminal",
+        "displayName": "Read Terminal Output",
+        "userDescription": "Read the available output from a named terminal",
+        "modelDescription": "Attempts to read and return the visible output from a named terminal. Note: VS Code's Terminal API has limitations and may not capture all terminal content.",
+        "canBeReferencedInPrompt": true,
+        "toolReferenceName": "readTerminal",
+        "icon": "output",
+        "tags": ["terminal", "read", "output", "content"],
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "terminalName": {
+              "type": "string",
+              "description": "The name of the terminal to read output from"
+            }
+          },
+          "required": ["terminalName"]
+        }
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "npm run check-types && npm run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "npm run check-types && npm run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.102.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "esbuild": "^0.25.3",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.3",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

@@ -1,0 +1,61 @@
+out
+dist
+node_modules
+.vscode-test/
+*.vsix
+memory-bank/activeContext.md
+memory-bank/architect.md
+memory-bank/decisionLog.md
+memory-bank/productContext.md
+memory-bank/progress.md
+memory-bank/projectBrief.md
+memory-bank/systemPatterns.md
+
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# VS Code
+.vscode/
+.history/
+
+# Build output
+dist/
+build/
+lib/
+*.tsbuildinfo
+
+# TypeScript
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+.env
+.env.*
+*.local
+
+# Test
+*.test.ts.snap
+
+# esbuild
+*.esbuild.js
+
+# Others
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
