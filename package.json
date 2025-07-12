@@ -6,6 +6,7 @@
   "publisher": "MiJur",
   "author": "MiJur",
   "license": "MIT",
+  "icon": "terminal-icon.png",
   "homepage": "https://github.com/mijur/vsc-terminal-tools#readme",
   "repository": {
     "type": "git",
