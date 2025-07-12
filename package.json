@@ -1,8 +1,28 @@
 {
-  "name": "terminal-tools",
-  "displayName": "Terminal Tools",
+  "name": "copilot-terminal-tools",
+  "displayName": "Copilot Terminal Tools",
   "description": "VS Code extension for managing named terminals with GitHub Copilot integration",
   "version": "0.0.1",
+  "publisher": "MiJur",
+  "author": "MiJur",
+  "license": "MIT",
+  "homepage": "https://github.com/mijur/vsc-terminal-tools#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mijur/vsc-terminal-tools.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mijur/vsc-terminal-tools/issues"
+  },
+  "keywords": [
+    "terminal",
+    "copilot",
+    "github",
+    "tools",
+    "management",
+    "ai",
+    "chat"
+  ],
   "engines": {
     "vscode": "^1.102.0"
   },
@@ -59,7 +79,11 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "listTerminals",
         "icon": "terminal",
-        "tags": ["terminal", "list", "terminals"],
+        "tags": [
+          "terminal",
+          "list",
+          "terminals"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {}
@@ -73,7 +97,11 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "createTerminal",
         "icon": "add",
-        "tags": ["terminal", "create", "new"],
+        "tags": [
+          "terminal",
+          "create",
+          "new"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -90,7 +118,9 @@
               "description": "Path to the shell executable (optional)"
             }
           },
-          "required": ["name"]
+          "required": [
+            "name"
+          ]
         }
       },
       {
@@ -101,7 +131,12 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "sendCommandOrCreate",
         "icon": "play",
-        "tags": ["terminal", "command", "execute", "create"],
+        "tags": [
+          "terminal",
+          "command",
+          "execute",
+          "create"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -110,7 +145,7 @@
               "description": "The name of the terminal to send the command to (will be created if it doesn't exist)"
             },
             "command": {
-              "type": "string", 
+              "type": "string",
               "description": "The command to execute in the terminal"
             },
             "cwd": {
@@ -122,7 +157,10 @@
               "description": "Path to the shell executable if the terminal needs to be created (optional)"
             }
           },
-          "required": ["terminalName", "command"]
+          "required": [
+            "terminalName",
+            "command"
+          ]
         }
       },
       {
@@ -133,7 +171,10 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "renameTerminal",
         "icon": "edit",
-        "tags": ["terminal", "rename"],
+        "tags": [
+          "terminal",
+          "rename"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -146,7 +187,10 @@
               "description": "The new name for the terminal"
             }
           },
-          "required": ["oldName", "newName"]
+          "required": [
+            "oldName",
+            "newName"
+          ]
         }
       },
       {
@@ -157,7 +201,11 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "deleteTerminal",
         "icon": "trash",
-        "tags": ["terminal", "delete", "remove"],
+        "tags": [
+          "terminal",
+          "delete",
+          "remove"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -166,7 +214,9 @@
               "description": "The name of the terminal to delete"
             }
           },
-          "required": ["name"]
+          "required": [
+            "name"
+          ]
         }
       },
       {
@@ -177,7 +227,12 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "cancelCommand",
         "icon": "stop",
-        "tags": ["terminal", "cancel", "interrupt", "ctrl+c"],
+        "tags": [
+          "terminal",
+          "cancel",
+          "interrupt",
+          "ctrl+c"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -186,7 +241,9 @@
               "description": "The name of the terminal to send the cancel signal to"
             }
           },
-          "required": ["terminalName"]
+          "required": [
+            "terminalName"
+          ]
         }
       },
       {
@@ -197,7 +254,12 @@
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "readTerminal",
         "icon": "output",
-        "tags": ["terminal", "read", "output", "content"],
+        "tags": [
+          "terminal",
+          "read",
+          "output",
+          "content"
+        ],
         "inputSchema": {
           "type": "object",
           "properties": {
@@ -206,7 +268,9 @@
               "description": "The name of the terminal to read output from"
             }
           },
-          "required": ["terminalName"]
+          "required": [
+            "terminalName"
+          ]
         }
       }
     ]
@@ -223,19 +287,25 @@
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "version:patch": "node scripts/bump-version.js patch",
+    "version:minor": "node scripts/bump-version.js minor",
+    "version:major": "node scripts/bump-version.js major",
+    "prepare-release": "npm run package && vsce package",
+    "publish:marketplace": "vsce publish"
   },
   "devDependencies": {
-    "@types/vscode": "^1.102.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.102.0",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
-    "eslint": "^9.25.1",
-    "esbuild": "^0.25.3",
-    "npm-run-all": "^4.1.5",
-    "typescript": "^5.8.3",
     "@vscode/test-cli": "^0.0.11",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.6.0",
+    "esbuild": "^0.25.3",
+    "eslint": "^9.25.1",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.8.3"
   }
 }
