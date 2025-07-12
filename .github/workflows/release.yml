@@ -1,65 +1,51 @@
-name: Release
+name: Release Extension
 
 on:
-  push:
-    tags:
-      - 'v*'
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (leave empty to use package.json version)'
+        required: false
+        type: string
 
 permissions:
-  contents: write  # Required to create releases and upload assets
-  actions: read    # Required for workflow access
+  contents: read
+  actions: read
 
 jobs:
-  publish:
+  release:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Install Node.js
+      
+    - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
-        node-version: 18
+        node-version: '20'
         cache: 'npm'
-
+        
     - name: Install dependencies
       run: npm ci
-
-    - name: Install vsce
-      run: npm install -g @vscode/vsce
-
-    - name: Extract version from tag
-      id: get_version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
-
-    - name: Update package.json version
-      run: |
-        npm version ${{ steps.get_version.outputs.VERSION }} --no-git-tag-version
-
-    - name: Package extension
-      run: npm run package
-
-    - name: Get package name from package.json
-      id: get_package_name
-      run: |
-        PACKAGE_NAME=$(node -p "require('./package.json').name")
-        echo "PACKAGE_NAME=$PACKAGE_NAME" >> $GITHUB_OUTPUT
-
-    - name: List generated files (debug)
-      run: ls -la *.vsix
-
-    - name: Create GitHub Release
-      uses: softprops/action-gh-release@v1
-      with:
-        files: ./${{ steps.get_package_name.outputs.PACKAGE_NAME }}-${{ steps.get_version.outputs.VERSION }}.vsix
-        name: Release ${{ steps.get_version.outputs.VERSION }}
-        draft: false
-        prerelease: false
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # Optional: Publish to VS Code Marketplace
+      
+    - name: Update version if specified
+      if: github.event.inputs.version != ''
+      run: npm version ${{ github.event.inputs.version }} --no-git-tag-version
+      
+    - name: Prepare release package
+      run: npm run prepare-release
+      
     - name: Publish to VS Code Marketplace
-      run: vsce publish -p ${{ secrets.VSCE_PAT }}
-      if: ${{ !contains(github.ref, 'beta') }}
+      run: npm run publish:marketplace
+      env:
+        VSCE_PAT: ${{ secrets.VSCE_PAT }}
+        
+    - name: Upload VSIX artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: extension-vsix
+        path: '*.vsix'
+        retention-days: 30
