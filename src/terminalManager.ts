@@ -2,41 +2,13 @@ import * as vscode from 'vscode';
 
 import { exec } from 'child_process';
 import { promisify } from 'util';
-
-export interface NamedTerminal {
-	terminal: vscode.Terminal;
-	name: string;
-	created: Date;
-}
-
-
-export interface CommandResult {
-	success: boolean;
-	output: string;
-	error?: string;
-	exitCode: number;
-	executionTime: number;
-}
-
-export interface CommandExecutionResponse {
-	success: boolean;
-	message: string;
-	created: boolean;
-	result?: CommandResult;
-}
-
-export interface CommandResponse {
-	success: boolean;
-	message: string;
-	created: boolean;
-}
+import { CommandExecutionResponse, CommandResponse, CommandResult, NamedTerminal } from './types';
 
 const execAsync = promisify(exec);
 
 export class TerminalManager {
 
 	constructor() {
-
 	}
 
 	public createTerminal(name: string, shellPath?: string, cwd?: string): NamedTerminal {

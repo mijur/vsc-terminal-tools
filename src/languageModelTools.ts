@@ -21,10 +21,3 @@ export function registerLanguageModelTools(context: vscode.ExtensionContext): vo
 
     context.subscriptions.push(...tools);
 }
-
-// Export the shared terminal manager for other modules to use
-export { terminalManager } from './terminalManager';
-
-// Export types
-export * from './types/terminal.types';
-export * from './types/tool.parameters';

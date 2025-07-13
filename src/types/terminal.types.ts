@@ -5,9 +5,6 @@ export interface NamedTerminal {
     terminal: vscode.Terminal;
     name: string;
     created: Date;
-    lastCommand?: string;
-    lastOutput?: string;
-    lastExecution?: Date;
 }
 
 // Interface for command execution results
