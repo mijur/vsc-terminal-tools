@@ -22,11 +22,7 @@ export class ListTerminalsTool extends BaseTool<ListTerminalsParameters> {
         }
 
         const terminalList = terminals.map(t => {
-            const lastCommandInfo = t.lastCommand ? `\n  - Last command: \`${t.lastCommand}\`` : '';
-            const lastExecutionInfo = t.lastExecution ? `\n  - Last execution: ${t.lastExecution.toLocaleString()}` : '';
-            const lastOutputInfo = t.lastOutput ? `\n  - Has captured output: Yes` : '';
-            
-            return `- **${t.name}** (created: ${t.created.toLocaleString()})${lastCommandInfo}${lastExecutionInfo}${lastOutputInfo}`;
+            return `- **${t.name}** (created: ${t.created.toLocaleString()})`;
         }).join('\n\n');
 
         return new vscode.LanguageModelToolResult([

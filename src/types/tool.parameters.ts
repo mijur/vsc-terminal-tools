@@ -25,19 +25,10 @@ export interface ExecuteCommandWithOutputParameters {
     shellPath?: string;
 }
 
-export interface RenameTerminalParameters {
-    oldName: string;
-    newName: string;
-}
-
 export interface DeleteTerminalParameters {
     name: string;
 }
 
 export interface CancelCommandParameters {
-    terminalName: string;
-}
-
-export interface ReadTerminalParameters {
     terminalName: string;
 }

@@ -82,5 +82,4 @@ The Terminal Tools extension provides advanced terminal management capabilities 
 1. **Terminal Naming**: Use descriptive, consistent names that reflect the terminal's purpose
 2. **Command Organization**: Group related commands in appropriate named terminals
 3. **Resource Management**: Clean up long-running processes when no longer needed
-4. **Error Handling**: Use `terminal-tools_readTerminal` to monitor command execution and handle errors
 5. **Background Processes**: Use dedicated terminals for services that need to run continuously

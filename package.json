@@ -30,7 +30,9 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "*"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
@@ -43,10 +45,6 @@
         "title": "Terminal Tools: Create Named Terminal"
       },
       {
-        "command": "terminal-tools.renameTerminal",
-        "title": "Terminal Tools: Rename Terminal"
-      },
-      {
         "command": "terminal-tools.sendCommand",
         "title": "Terminal Tools: Send Command to Terminal (Create if Needed)"
       },
@@ -57,10 +55,6 @@
       {
         "command": "terminal-tools.cancelCommand",
         "title": "Terminal Tools: Cancel Command in Terminal"
-      },
-      {
-        "command": "terminal-tools.readTerminal",
-        "title": "Terminal Tools: Read Terminal Output"
       }
     ],
     "languageModelTools": [
@@ -198,36 +192,6 @@
         }
       },
       {
-        "name": "terminal-tools_renameTerminal",
-        "displayName": "Rename Terminal",
-        "userDescription": "Rename a named terminal",
-        "modelDescription": "Renames an existing named terminal to a new name.",
-        "canBeReferencedInPrompt": true,
-        "toolReferenceName": "renameTerminal",
-        "icon": "edit",
-        "tags": [
-          "terminal",
-          "rename"
-        ],
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "oldName": {
-              "type": "string",
-              "description": "The current name of the terminal"
-            },
-            "newName": {
-              "type": "string",
-              "description": "The new name for the terminal"
-            }
-          },
-          "required": [
-            "oldName",
-            "newName"
-          ]
-        }
-      },
-      {
         "name": "terminal-tools_deleteTerminal",
         "displayName": "Delete Terminal",
         "userDescription": "Delete a named terminal",
@@ -273,33 +237,6 @@
             "terminalName": {
               "type": "string",
               "description": "The name of the terminal to send the cancel signal to"
-            }
-          },
-          "required": [
-            "terminalName"
-          ]
-        }
-      },
-      {
-        "name": "terminal-tools_readTerminal",
-        "displayName": "Read Terminal Output",
-        "userDescription": "Read the available output from a named terminal",
-        "modelDescription": "Attempts to read and return the visible output from a named terminal. Note: VS Code's Terminal API has limitations and may not capture all terminal content.",
-        "canBeReferencedInPrompt": true,
-        "toolReferenceName": "readTerminal",
-        "icon": "output",
-        "tags": [
-          "terminal",
-          "read",
-          "output",
-          "content"
-        ],
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "terminalName": {
-              "type": "string",
-              "description": "The name of the terminal to read output from"
             }
           },
           "required": [

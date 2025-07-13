@@ -91,58 +91,6 @@ export class TerminalToolsParticipant {
 			}
 		});
 
-		// Tool: Read Terminal
-		this.tools.push({
-			name: 'readTerminal',
-			description: 'Read and return the visible output from a named terminal. Note: VS Code\'s Terminal API has limitations and may not capture all terminal content.',
-			schema: {
-				type: 'object',
-				properties: {
-					terminalName: {
-						type: 'string',
-						description: 'Name of the terminal to read output from'
-					}
-				},
-				required: ['terminalName']
-			},
-			handler: async (params: { terminalName: string }) => {
-				try {
-					await vscode.commands.executeCommand('terminal-tools.readTerminal');
-					return `Read output from terminal: ${params.terminalName}`;
-				} catch (error) {
-					return `Failed to read terminal output: ${error}`;
-				}
-			}
-		});
-
-		// Tool: Rename Terminal
-		this.tools.push({
-			name: 'renameTerminal',
-			description: 'Rename an existing terminal',
-			schema: {
-				type: 'object',
-				properties: {
-					oldName: {
-						type: 'string',
-						description: 'Current name of the terminal'
-					},
-					newName: {
-						type: 'string',
-						description: 'New name for the terminal'
-					}
-				},
-				required: ['oldName', 'newName']
-			},
-			handler: async (params: { oldName: string; newName: string }) => {
-				try {
-					await vscode.commands.executeCommand('terminal-tools.renameTerminal');
-					return `Renamed terminal from "${params.oldName}" to "${params.newName}"`;
-				} catch (error) {
-					return `Failed to rename terminal: ${error}`;
-				}
-			}
-		});
-
 		// Tool: Delete Terminal
 		this.tools.push({
 			name: 'deleteTerminal',

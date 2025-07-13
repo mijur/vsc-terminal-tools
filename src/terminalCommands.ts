@@ -6,11 +6,9 @@ export class TerminalCommands {
 		context.subscriptions.push(
 			vscode.commands.registerCommand('terminal-tools.listTerminals', TerminalCommands.listTerminals),
 			vscode.commands.registerCommand('terminal-tools.createTerminal', TerminalCommands.createTerminal),
-			vscode.commands.registerCommand('terminal-tools.renameTerminal', TerminalCommands.renameTerminal),
 			vscode.commands.registerCommand('terminal-tools.sendCommand', TerminalCommands.sendCommand),
 			vscode.commands.registerCommand('terminal-tools.cancelCommand', TerminalCommands.cancelCommand),
 			vscode.commands.registerCommand('terminal-tools.deleteTerminal', TerminalCommands.deleteTerminal),
-			vscode.commands.registerCommand('terminal-tools.readTerminal', TerminalCommands.readTerminal)
 		);
 	}
 
@@ -37,28 +35,6 @@ export class TerminalCommands {
 		const namedTerminal = terminalManager.createTerminal(name);
 		namedTerminal.terminal.show();
 		vscode.window.showInformationMessage(`Created terminal: ${name}`);
-	}
-
-	private static async renameTerminal() {
-		const terminals = terminalManager.getAllTerminals();
-		if (terminals.length === 0) {
-			vscode.window.showErrorMessage('No named terminals to rename.');
-			return;
-		}
-		const terminalNames = terminals.map(t => t.name);
-		const selectedTerminal = await vscode.window.showQuickPick(terminalNames, { placeHolder: 'Select terminal to rename' });
-		if (!selectedTerminal) { return; }
-		const newName = await vscode.window.showInputBox({ prompt: 'Enter new terminal name', value: selectedTerminal });
-		if (!newName || newName === selectedTerminal) { return; }
-		if (terminalManager.getTerminal(newName)) {
-			vscode.window.showErrorMessage(`Terminal '${newName}' already exists.`);
-			return;
-		}
-		if (terminalManager.renameTerminal(selectedTerminal, newName)) {
-			vscode.window.showInformationMessage(`Renamed terminal from '${selectedTerminal}' to '${newName}'`);
-		} else {
-			vscode.window.showErrorMessage('Failed to rename terminal.');
-		}
 	}
 
 	private static async sendCommand() {
@@ -116,24 +92,6 @@ export class TerminalCommands {
 			} else {
 				vscode.window.showErrorMessage('Failed to delete terminal.');
 			}
-		}
-	}
-
-	private static async readTerminal() {
-		const terminals = terminalManager.getAllTerminals();
-		if (terminals.length === 0) {
-			vscode.window.showErrorMessage('No named terminals available.');
-			return;
-		}
-		const terminalNames = terminals.map(t => t.name);
-		const selectedTerminal = await vscode.window.showQuickPick(terminalNames, { placeHolder: 'Select terminal to read' });
-		if (!selectedTerminal) { return; }
-		const output = await terminalManager.readTerminal(selectedTerminal);
-		if (output) {
-			const document = await vscode.workspace.openTextDocument({ content: output, language: 'plaintext' });
-			await vscode.window.showTextDocument(document);
-		} else {
-			vscode.window.showErrorMessage('Failed to read terminal.');
 		}
 	}
 }
