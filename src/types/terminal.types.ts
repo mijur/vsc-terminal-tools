@@ -27,3 +27,8 @@ export interface CommandResponse {
     success: boolean;
     message: string;
 }
+
+export interface CancelCommandResponse{
+    success: boolean;
+    cancelledCommand: string;
+}

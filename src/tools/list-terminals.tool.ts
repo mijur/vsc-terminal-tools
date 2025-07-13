@@ -22,7 +22,7 @@ export class ListTerminalsTool extends BaseTool<ListTerminalsParameters> {
         }
 
         const terminalList = terminals.map(t => {
-            return `- **${t.name}** (created: ${t.created.toLocaleString()})`;
+            return `- **${t.name} - shell integration: ${!!t.terminal.shellIntegration}**`;
         }).join('\n\n');
 
         return new vscode.LanguageModelToolResult([

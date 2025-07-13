@@ -7,6 +7,6 @@ export function listTerminals() {
         vscode.window.showInformationMessage('No named terminals found.');
         return;
     }
-    const terminalList = terminals.map(t => `${t.name} (created: ${t.created.toLocaleString()})`).join('\n');
+    const terminalList = terminals.map(t => `${t.name} - shell integration: ${!!t.terminal.shellIntegration}`).join('\n');
     vscode.window.showInformationMessage(`Named Terminals:\n${terminalList}`);
 }

@@ -21,16 +21,10 @@ export class CancelCommandTool extends BaseTool<CancelCommandParameters> {
             ]);
         }
 
-        const success = await terminalManager.cancelCommand(terminalName);
+        const response = await terminalManager.cancelCommand(terminalName);
         
-        if (success) {
-            return new vscode.LanguageModelToolResult([
-                new vscode.LanguageModelTextPart(`Successfully sent cancel signal (Ctrl+C) to terminal '${terminalName}'.`)
-            ]);
-        } else {
-            return new vscode.LanguageModelToolResult([
-                new vscode.LanguageModelTextPart(`Failed to send cancel signal to terminal '${terminalName}'.`)
-            ]);
-        }
+        return new vscode.LanguageModelToolResult([
+            new vscode.LanguageModelTextPart(JSON.stringify(response))
+        ]);
     }
 }

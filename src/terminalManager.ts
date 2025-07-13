@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { CommandExecutionResponse, CommandResponse, CommandResult, NamedTerminal } from './types';
+import { CancelCommandResponse, CommandExecutionResponse, CommandResponse, CommandResult, NamedTerminal } from './types';
 
 export class TerminalManager {
 
@@ -58,23 +58,35 @@ export class TerminalManager {
 		return false;
 	}
 	
-	public async cancelCommand(terminalName: string): Promise<boolean> {
+	public async cancelCommand(terminalName: string): Promise<CancelCommandResponse> {
 		const namedTerminal = this.getTerminal(terminalName);
 		if (namedTerminal) {
 			// Send Ctrl+C to cancel the current command
 			namedTerminal.terminal.show(true);
 			if(!namedTerminal.terminal.shellIntegration) {
 				namedTerminal.terminal.sendText('\x03');
+				return {
+					success:true, 
+					cancelledCommand: `Shell integration is unsupported. Impossible to determine cancelled command. Sent cancel signal (Ctrl+C) to terminal '${terminalName}'.`
+				};
 			}else{
-				const res = namedTerminal.terminal.shellIntegration?.executeCommand('\x03'); // Ensure shell integration is used if available
-				const stream = res.read();
-				for await (const data of stream) {
-					console.log(data);
-				}
+				const endPromise = new Promise<CancelCommandResponse>((resolve)=>{
+					const disposable = vscode.window.onDidEndTerminalShellExecution(async (event) => {
+						if(event.exitCode!==1 ||terminalName !== event.terminal.name){
+							return;
+						}
+						const exitCode = event.exitCode ?? 1; // Default to 1 if exitCode is undefined
+						resolve({success: exitCode===1, cancelledCommand: event.execution.commandLine.value});
+						disposable.dispose(); // Clean up the event listener
+					});
+				});
+				namedTerminal.terminal.shellIntegration.executeCommand('');
+				var response = await endPromise;
+				return response;
 			}
-			return true;
 		}
-		return false;
+		return {success:false, cancelledCommand: `Terminal '${terminalName}' was not found.`};
+
 	}
 
 	public sendCommand(terminalName: string, command: string, shellPath?: string, workingDirectory?: string): CommandResponse {
@@ -126,42 +138,53 @@ export class TerminalManager {
 		}
 
 		try {
-			// Execute command using shell integration
-			const execution = terminal.shellIntegration.executeCommand(command);
-			
-			// Create a stream to read the output
-			const stream = execution.read();
-			let output = '';
-			
-			// Set up a promise to wait for the command to complete
-			const executionPromise = new Promise<{ exitCode: number | undefined }>((resolve) => {
-				const disposable = vscode.window.onDidEndTerminalShellExecution(event => {
-					if (event.execution === execution) {
-						disposable.dispose();
-						resolve({ exitCode: event.exitCode });
+			const startPromise = new Promise<string>((resolve)=>{
+				const disposable = vscode.window.onDidStartTerminalShellExecution(async (event) => {
+					if (event.terminal.name === terminal.name) {
+						const stream = event.execution.read();
+						let output = '';
+					
+						for await (const result of stream) {
+							console.log(`Received output from terminal '${terminal.name}':`, result);
+							output += result;
+						}
+						disposable.dispose(); // Clean up the event listener
+						resolve(this.cleanAnsiEscapes(output));
 					}
 				});
 			});
 			
-			// Read all output from the stream
-			for await (const data of stream) {
 				
-				output += data;
+			const endPromise = new Promise<number>((resolve)=>{
+				const disposable = vscode.window.onDidEndTerminalShellExecution(async (event) => {
+					if( event.execution.commandLine.value !== command){
+						return;
+					}
+					
+					const exitCode = event.exitCode ?? 1; // Default to 1 if exitCode is undefined
+					console.log(`Terminal '${terminal.name}' finished with exit code ${exitCode} in ${executionTime}ms`);
+					resolve(exitCode);
+					console.log(`Terminal '${terminal.name}' finished with exit code ${exitCode}`);
+					disposable.dispose(); // Clean up the event listener
+				});
+			});
+			
+			const promises = Promise.all([
+				startPromise,
+				endPromise
+			]);
+
+			let execution=terminal.shellIntegration.executeCommand(command);
+			if (!execution) {
+				throw new Error('Shell integration failed to execute command');
 			}
-			
-			// Wait for the command to complete and get exit code
-			const result = await executionPromise;
-			const exitCode = result.exitCode ?? 1; // Default to error if undefined
 			const executionTime = Date.now() - startTime;
-			
-			// Clean up output (remove ANSI escape sequences for cleaner text)
-			const cleanOutput = this.cleanAnsiEscapes(output);
-			
+			const result = await promises;
 			return {
-				success: exitCode === 0,
-				output: cleanOutput.trim(),
-				error: exitCode !== 0 ? `Command failed with exit code ${exitCode}` : undefined,
-				exitCode: exitCode,
+				success: result[1] !== 1,
+				output: result[0],
+				error:  `Command failed with exit code ${ result[1] !== 1}`,
+				exitCode: result[1],
 				executionTime
 			};
 		} catch (error: any) {
