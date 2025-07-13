@@ -20,7 +20,6 @@ export interface CommandResult {
 export interface CommandExecutionResponse {
     success: boolean;
     message: string;
-    created: boolean;
     result?: CommandResult;
 }
 
@@ -28,5 +27,4 @@ export interface CommandExecutionResponse {
 export interface CommandResponse {
     success: boolean;
     message: string;
-    created: boolean;
 }

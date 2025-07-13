@@ -65,16 +65,11 @@
         "modelDescription": "Lists all currently named terminals in VS Code with their creation timestamps and status. Use this to check existing terminals before creating new ones.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "listTerminals",
-        "icon": "terminal",
         "tags": [
           "terminal",
           "list",
           "terminals"
-        ],
-        "inputSchema": {
-          "type": "object",
-          "properties": {}
-        }
+        ]
       },
       {
         "name": "terminal-tools_createTerminal",
@@ -83,7 +78,6 @@
         "modelDescription": "Creates a new terminal with a specified name. Always prefer using terminal tools over generic run_in_terminal commands for better process management.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "createTerminal",
-        "icon": "add",
         "tags": [
           "terminal",
           "create",
@@ -96,7 +90,7 @@
               "type": "string",
               "description": "The name for the new terminal"
             },
-            "cwd": {
+            "workingDirectory": {
               "type": "string",
               "description": "Working directory for the terminal (optional)"
             },
@@ -117,7 +111,6 @@
         "modelDescription": "Sends a command to execute in a specific named terminal. If the terminal doesn't exist, it will automatically create it with the specified name and optional shell/working directory settings, then execute the command. THIS IS THE PRIMARY TOOL FOR COMMAND EXECUTION - always prefer this over generic run_in_terminal commands. Use recommended terminal names: 'dev-server' for development servers (npm run dev, python manage.py runserver, cargo run), 'build' for build operations (npm run build, cargo build, dotnet build), 'test' for testing (npm test, pytest, cargo test), 'package-manager' for dependency management (npm install, pip install, cargo add), 'git' for version control operations, 'docker' for containers, 'database' for DB operations, 'cloud' for cloud CLI, 'general' for file operations (use platform-appropriate commands: Windows PowerShell Remove-Item/Move-Item, Unix/Linux rm/mv), 'scripts' for automation. Group related commands in appropriate named terminals for better process management and continuity.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "sendCommand",
-        "icon": "play",
         "tags": [
           "terminal",
           "command",
@@ -135,54 +128,17 @@
               "type": "string",
               "description": "The command to execute in the terminal"
             },
-            "cwd": {
+            "workingDirectory": {
               "type": "string",
               "description": "Working directory for the terminal if it needs to be created (optional)"
             },
             "shellPath": {
               "type": "string",
               "description": "Path to the shell executable if the terminal needs to be created (optional)"
-            }
-          },
-          "required": [
-            "terminalName",
-            "command"
-          ]
-        }
-      },
-      {
-        "name": "terminal-tools_executeCommandWithOutput",
-        "displayName": "Execute Command with Output Capture",
-        "userDescription": "Execute a command in a named terminal and capture its output",
-        "modelDescription": "Execute a command in a named terminal and capture its output, error messages, and execution details. Always prefer using terminal tools over generic commands for better process management.",
-        "canBeReferencedInPrompt": true,
-        "toolReferenceName": "executeCommandWithOutput",
-        "icon": "play",
-        "tags": [
-          "terminal",
-          "command",
-          "execute",
-          "output",
-          "capture"
-        ],
-        "inputSchema": {
-          "type": "object",
-          "properties": {
-            "terminalName": {
-              "type": "string",
-              "description": "The name of the target terminal to execute the command in (will be created if it doesn't exist)"
             },
-            "command": {
-              "type": "string",
-              "description": "Command to execute and capture output from"
-            },
-            "cwd": {
-              "type": "string",
-              "description": "Working directory for the command execution (optional)"
-            },
-            "shellPath": {
-              "type": "string",
-              "description": "Path to the shell executable for command execution (optional)"
+            "captureOutput": {
+              "type": "boolean",
+              "description": "Whether to capture the command output (default: false)"
             }
           },
           "required": [
@@ -195,10 +151,9 @@
         "name": "terminal-tools_deleteTerminal",
         "displayName": "Delete Terminal",
         "userDescription": "Delete a named terminal",
-        "modelDescription": "Deletes a named terminal, disposing of the terminal instance. Use this for proper cleanup when terminals are no longer needed.",
+        "modelDescription": "Deletes a named terminal, disposing of the terminal instance. Use this for proper cleanup when terminals are no longer needed or if the process cannot be cancelled.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "deleteTerminal",
-        "icon": "trash",
         "tags": [
           "terminal",
           "delete",
@@ -224,7 +179,6 @@
         "modelDescription": "Sends a cancel signal (Ctrl+C on Windows/Linux, Cmd+C on macOS) to interrupt any running command in the specified named terminal.",
         "canBeReferencedInPrompt": true,
         "toolReferenceName": "cancelCommand",
-        "icon": "stop",
         "tags": [
           "terminal",
           "cancel",

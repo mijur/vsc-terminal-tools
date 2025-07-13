@@ -11,7 +11,7 @@ export async function createTerminal() {
         vscode.window.showErrorMessage(`Terminal '${name}' already exists.`);
         return;
     }
-    const namedTerminal = terminalManager.createTerminal(name);
+    const namedTerminal = terminalManager.getOrCreateTerminal(name);
     namedTerminal.terminal.show();
     vscode.window.showInformationMessage(`Created terminal: ${name}`);
 }

@@ -13,7 +13,7 @@ export class CreateTerminalTool extends BaseTool<CreateTerminalParameters> {
     }
 
     async invoke(options: vscode.LanguageModelToolInvocationOptions<CreateTerminalParameters>, token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult> {
-        const { name, cwd, shellPath } = options.input;
+        const { name, workingDirectory, shellPath } = options.input;
 
         if (terminalManager.getTerminal(name)) {
             return new vscode.LanguageModelToolResult([
@@ -21,7 +21,7 @@ export class CreateTerminalTool extends BaseTool<CreateTerminalParameters> {
             ]);
         }
 
-        const namedTerminal = terminalManager.createTerminal(name, shellPath, cwd);
+        const namedTerminal = terminalManager.getOrCreateTerminal(name, shellPath, workingDirectory);
         namedTerminal.terminal.show();
 
         return new vscode.LanguageModelToolResult([

@@ -21,7 +21,7 @@ export class CancelCommandTool extends BaseTool<CancelCommandParameters> {
             ]);
         }
 
-        const success = terminalManager.cancelCommand(terminalName);
+        const success = await terminalManager.cancelCommand(terminalName);
         
         if (success) {
             return new vscode.LanguageModelToolResult([

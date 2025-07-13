@@ -14,11 +14,11 @@ export class SendCommandOrCreateTool extends BaseTool<SendCommandParameters> {
     }
 
     async invoke(options: vscode.LanguageModelToolInvocationOptions<SendCommandParameters>, token: vscode.CancellationToken): Promise<vscode.LanguageModelToolResult> {
-        const { terminalName, command, cwd, shellPath, captureOutput } = options.input;
+        const { terminalName, command, workingDirectory, shellPath, captureOutput=false } = options.input;
 
         if (captureOutput) {
             // Use the new method that captures output
-            const result = await terminalManager.executeCommandWithOutput(terminalName, command, shellPath, cwd);
+            const result = await terminalManager.executeCommandWithOutput(terminalName, command, shellPath, workingDirectory);
             
             if (result.success && result.result) {
                 const executionInfo = `\n\n**Execution Details:**
@@ -39,7 +39,7 @@ export class SendCommandOrCreateTool extends BaseTool<SendCommandParameters> {
             }
         } else {
             // Use the original method that just sends to terminal
-            const result = terminalManager.sendCommandOrCreate(terminalName, command, shellPath, cwd);
+            const result = terminalManager.sendCommand(terminalName, command, shellPath, workingDirectory);
             return new vscode.LanguageModelToolResult([
                 new vscode.LanguageModelTextPart(result.message)
             ]);

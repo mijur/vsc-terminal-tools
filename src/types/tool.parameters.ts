@@ -6,14 +6,14 @@ export interface ListTerminalsParameters {
 
 export interface CreateTerminalParameters {
     name: string;
-    cwd?: string;
+    workingDirectory?: string;
     shellPath?: string;
 }
 
 export interface SendCommandOrCreateParameters {
     terminalName: string;
     command: string;
-    cwd?: string;
+    workingDirectory?: string;
     shellPath?: string;
     captureOutput?: boolean; // New parameter to control output capture
 }
@@ -21,7 +21,7 @@ export interface SendCommandOrCreateParameters {
 export interface ExecuteCommandWithOutputParameters {
     terminalName: string;
     command: string;
-    cwd?: string;
+    workingDirectory?: string;
     shellPath?: string;
 }
 

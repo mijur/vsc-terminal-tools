@@ -10,7 +10,7 @@ export async function cancelCommand() {
     const terminalNames = terminals.map(t => t.name);
     const selectedTerminal = await vscode.window.showQuickPick(terminalNames, { placeHolder: 'Select terminal to cancel command in' });
     if (!selectedTerminal) { return; }
-    if (terminalManager.cancelCommand(selectedTerminal)) {
+    if (await terminalManager.cancelCommand(selectedTerminal)) {
         vscode.window.showInformationMessage(`Sent cancel signal to terminal '${selectedTerminal}'`);
     } else {
         vscode.window.showErrorMessage('Failed to send cancel signal to terminal.');
