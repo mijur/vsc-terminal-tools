@@ -31,7 +31,6 @@ export class TerminalManager {
 	}
 
 	public getTerminal(name: string): NamedTerminal | undefined {
-		// Try to find in VS Code terminals
 		const found = vscode.window.terminals.find(t => t.name === name);
 		if (found) {
 			const namedTerminal: NamedTerminal = {

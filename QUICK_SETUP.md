@@ -13,12 +13,12 @@ Edit `package.json` and update:
 ```json
 {
   "repository": {
-    "url": "https://github.com/YOUR_USERNAME/vsc-terminal-tools.git"
+    "url": "https://github.com/mijur/vsc-terminal-tools.git"
   },
   "bugs": {
-    "url": "https://github.com/YOUR_USERNAME/vsc-terminal-tools/issues"
+    "url": "https://github.com/mijur/vsc-terminal-tools/issues"
   },
-  "homepage": "https://github.com/YOUR_USERNAME/vsc-terminal-tools#readme"
+  "homepage": "https://github.com/mijur/vsc-terminal-tools#readme"
 }
 ```
 
