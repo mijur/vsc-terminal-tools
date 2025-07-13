@@ -21,7 +21,6 @@ export class TerminalManager {
 		const namedTerminal: NamedTerminal = {
 			terminal,
 			name,
-			created: new Date()
 		};
 		terminal.show(true);
 		return namedTerminal;
@@ -33,7 +32,6 @@ export class TerminalManager {
 			const namedTerminal: NamedTerminal = {
 				terminal: found,
 				name,
-				created: new Date(),
 			};
 			return namedTerminal;
 		}
@@ -46,7 +44,6 @@ export class TerminalManager {
 				({
 					terminal: t,
 					name: t.name,
-					created: new Date(),
 				}) as NamedTerminal
 			);
 		return namedTerminals;

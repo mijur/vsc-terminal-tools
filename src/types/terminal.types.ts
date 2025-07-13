@@ -4,7 +4,6 @@ import * as vscode from 'vscode';
 export interface NamedTerminal {
     terminal: vscode.Terminal;
     name: string;
-    created: Date;
 }
 
 // Interface for command execution results
