@@ -1,0 +1,112 @@
+# GitHub Labels Configuration
+# Apply these labels to your repository to organize issues and PRs
+
+# Priority Labels
+- name: "priority: high"
+  color: "d73a4a"
+  description: "High priority issue that should be addressed quickly"
+
+- name: "priority: medium"  
+  color: "fbca04"
+  description: "Medium priority issue"
+
+- name: "priority: low"
+  color: "0e8a16"
+  description: "Low priority issue"
+
+# Type Labels  
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+- name: "question"
+  color: "d876e3"
+  description: "Further information is requested"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "This issue or pull request already exists"
+
+- name: "invalid"
+  color: "e4e669"
+  description: "This doesn't seem right"
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "This will not be worked on"
+
+# Status Labels
+- name: "triage"
+  color: "fbca04"
+  description: "Needs to be triaged by maintainers"
+
+- name: "in progress"
+  color: "1d76db"
+  description: "Someone is actively working on this"
+
+- name: "waiting for response"
+  color: "fef2c0"
+  description: "Waiting for response from issue author"
+
+- name: "ready for review"
+  color: "0e8a16"
+  description: "Ready for code review"
+
+# Difficulty Labels (for contributors)
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: "difficulty: easy"
+  color: "c2e0c6"
+  description: "Easy to implement, good for beginners"
+
+- name: "difficulty: medium"
+  color: "ffd8b1"
+  description: "Requires some experience"
+
+- name: "difficulty: hard"
+  color: "f9d0c4"
+  description: "Complex implementation, needs expertise"
+
+# Component Labels
+- name: "component: tools"
+  color: "d4c5f9"
+  description: "Related to language model tools"
+
+- name: "component: terminal"
+  color: "c5def5"
+  description: "Related to terminal management"
+
+- name: "component: commands"
+  color: "fad8c7"
+  description: "Related to VS Code commands"
+
+- name: "component: tests"
+  color: "bfd4f2"
+  description: "Related to testing"
+
+# Special Labels
+- name: "breaking change"
+  color: "b60205"
+  description: "Will break existing functionality"
+
+- name: "dependencies"
+  color: "0366d6"
+  description: "Pull requests that update a dependency file"
+
+- name: "security"
+  color: "ee0701"
+  description: "Security-related issue"

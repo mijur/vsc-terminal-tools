@@ -1,180 +1,154 @@
-# Terminal Tools for GitHub Copilot
+# Copilot Terminal Tools
 
-A VS Code extension that provides terminal management tools directly accessible to GitHub Copilot through natural language conversations.
+A VS Code extension that provides intelligent terminal management for GitHub Copilot and AI assistants. The primary benefit is **preventing terminal spawning chaos** - instead of creating new terminals for every command, this extension allows AI agents to reuse named terminals, maintaining clean workspace organization and process continuity.
 
-## ✨ Key Features
+## 🎯 Key Benefits
 
-- **🤖 GitHub Copilot Integration**: Language model tools that work automatically with Copilot chat
-- **📱 Natural Language Interface**: Manage terminals through conversational commands  
-- **⚡ Instant Access**: No need to remember specific commands or syntax
-- **🔄 Seamless Workflow**: Create, manage, and execute commands in terminals without leaving chat
+- **Prevents Terminal Spam**: Stop AI agents from creating dozens of disposable terminals
+- **Organized Workflow**: Group related commands in appropriately named terminals
+- **Process Continuity**: Maintain context between commands in the same terminal
+- **Resource Efficiency**: Reuse terminals instead of spawning new processes
+- **Better Debugging**: Named terminals make it easy to track command history and output
 
-## 🛠️ Available Tools
+## 🚀 Features
 
-When installed, GitHub Copilot automatically gains access to these terminal management tools:
+### Core Functionality
 
-| Tool | Description | Example Usage |
-|------|-------------|---------------|
-| **List Terminals** | Show all named terminals | "Show me my terminals" |
-| **Create Terminal** | Create a new named terminal | "Create a terminal called 'dev-server'" |
-| **Send Command** | Execute commands in terminals | "Run 'npm start' in the dev-server terminal" |
-| **Rename Terminal** | Rename existing terminals | "Rename terminal 'old' to 'new'" |
-| **Delete Terminal** | Remove unwanted terminals | "Delete the build terminal" |
+- **Named Terminal Management**: Create, list, and delete terminals with meaningful names
+- **Smart Command Execution**: Send commands to existing terminals or create them automatically
+- **Output Capture**: Execute commands and capture their output, errors, and execution details
+- **Process Control**: Cancel running commands with proper signal handling
+- **GitHub Copilot Integration**: Provides language model tools for AI-driven development
 
-## 🚀 Quick Start
+### Available Tools
 
-1. **Install** the Terminal Tools extension
-2. **Open** GitHub Copilot chat (`Ctrl+Shift+I` or `Cmd+Shift+I`)
-3. **Talk naturally** about terminal tasks:
+| Tool | Description | Use Case |
+|------|-------------|----------|
+| `listTerminals` | List all named terminals with status | Check existing terminals before creating new ones |
+| `createTerminal` | Create a new named terminal | Set up dedicated terminals for specific purposes |
+| `sendCommand` | Send command to terminal (create if needed) | **Primary tool** for command execution |
+| `executeCommandWithOutput` | Execute command and capture output | Get command results for processing |
+| `deleteTerminal` | Remove a named terminal | Clean up when terminals are no longer needed |
+| `cancelCommand` | Send Ctrl+C to interrupt commands | Stop long-running or stuck processes |
 
-```
-User: "I need to start a development server. Create a terminal called 'dev' and run npm start in it."
+## 📋 Recommended Terminal Names
 
-Copilot: I'll set that up for you right away!
-✅ Created terminal 'dev'  
-✅ Executed 'npm start' in terminal 'dev'
+Organize your development workflow with these suggested terminal names:
 
-Your development server is now running in the 'dev' terminal.
-```
+- **`dev-server`** - Development servers (`npm run dev`, `python manage.py runserver`, `cargo run`)
+- **`build`** - Build operations (`npm run build`, `cargo build`, `dotnet build`)
+- **`test`** - Testing commands (`npm test`, `pytest`, `cargo test`)
+- **`package-manager`** - Dependencies (`npm install`, `pip install`, `cargo add`)
+- **`git`** - Version control operations
+- **`docker`** - Container management
+- **`database`** - Database operations
+- **`cloud`** - Cloud CLI commands
+- **`general`** - File operations and utilities
+- **`scripts`** - Automation and custom scripts
 
-## 📋 Example Conversations
+## 🛠️ Installation
 
-### Setting Up a Development Environment
-```
-User: "Set up my workspace with terminals for frontend, backend, and testing"
-
-Copilot: I'll create those terminals for you:
-✅ Created terminal 'frontend'
-✅ Created terminal 'backend' 
-✅ Created terminal 'testing'
-
-Your workspace is ready! You now have dedicated terminals for each part of your development workflow.
-```
-
-### Running Multiple Commands
-```
-User: "In the frontend terminal, install dependencies and start the dev server"
-
-Copilot: I'll run those commands in sequence:
-✅ Sent 'npm install' to terminal 'frontend'
-✅ Sent 'npm run dev' to terminal 'frontend'
-
-Your frontend development server should now be starting up.
-```
-
-### Terminal Cleanup
-```
-User: "Show me all my terminals and help me clean up old ones"
-
-Copilot: Here are your current terminals:
-- **frontend** (created: Dec 7, 2:30 PM)
-- **old-build** (created: Dec 6, 10:15 AM) 
-- **testing** (created: Dec 7, 1:45 PM)
-
-The 'old-build' terminal looks outdated. Would you like me to remove it?
-```
-
-## 🎯 Why Use Terminal Tools?
-
-### Before
-```bash
-# Manual process:
-1. Ctrl+Shift+` to open terminal
-2. Remember terminal naming conventions
-3. Switch between multiple terminals
-4. Type repetitive commands
-5. Manage terminal lifecycle manually
-```
-
-### After  
-```
-# Natural conversation:
-"Create a build terminal and run the production build process"
-```
-
-## 🔧 Advanced Usage
-
-### Tool References in Prompts
-You can explicitly reference tools using hashtags:
-
-- `#listTerminals` - List all terminals
-- `#createTerminal` - Create a new terminal  
-- `#sendCommand` - Send command to terminal
-- `#renameTerminal` - Rename a terminal
-- `#deleteTerminal` - Delete a terminal
-
-### Integration with Other Extensions
-Terminal Tools works seamlessly with other Copilot-enabled extensions, allowing for complex workflows:
-
-```
-User: "Search the web for the latest Node.js install instructions, then create a terminal called 'setup' and install Node.js"
-
-Copilot: [Uses web search tool] Based on the latest instructions, I'll set up Node.js for you:
-✅ Created terminal 'setup'
-✅ Executing Node.js installation commands...
-```
-
-## 🏗️ Technical Details
-
-- **Extension Type**: Language Model Tools for VS Code
-- **Copilot Integration**: Automatic tool discovery and registration
-- **Supported Platforms**: Windows, macOS, Linux
-- **VS Code Version**: 1.102.0+
-
-## 📦 Installation
-
+### From VS Code Marketplace
 1. Open VS Code
-2. Go to Extensions (`Ctrl+Shift+X`)
-3. Search for "Terminal Tools"
+2. Go to Extensions (Ctrl+Shift+X)
+3. Search for "Copilot Terminal Tools"
 4. Click Install
-5. Tools automatically available in Copilot chat
 
-## 🤝 Alternative Usage
+### Manual Installation
+1. Download the latest `.vsix` file from [releases](https://github.com/mijur/vsc-terminal-tools/releases)
+2. In VS Code: `Ctrl+Shift+P` → "Extensions: Install from VSIX..."
+3. Select the downloaded file
 
-Besides Copilot integration, the extension also provides:
+## 💡 Usage Examples
 
-- **Chat Participant**: `@terminal-tools` for direct interaction
-- **Command Palette**: Traditional VS Code commands
-- **Keyboard Shortcuts**: Configurable hotkeys
+### With GitHub Copilot Chat
 
-## Requirements
+Instead of Copilot creating multiple terminals:
+```
+❌ Before: "run npm install" → Creates Terminal 1
+❌ Before: "start dev server" → Creates Terminal 2  
+❌ Before: "run tests" → Creates Terminal 3
+```
 
-- VS Code version 1.102.0 or higher
-- GitHub Copilot extension (for language model tools integration)
+With this extension:
+```
+✅ After: Commands go to organized, named terminals
+📁 package-manager: npm install, npm update
+🖥️ dev-server: npm run dev (keeps running)
+🧪 test: npm test, npm run test:watch
+```
 
-## Extension Settings
+### Manual Commands
 
-This extension does not contribute any settings.
+Use the Command Palette (`Ctrl+Shift+P`):
 
-## Known Issues
+- **Terminal Tools: List Named Terminals** - See all your named terminals
+- **Terminal Tools: Create Named Terminal** - Create a new terminal with a specific name
+- **Terminal Tools: Send Command to Terminal** - Execute commands in named terminals
+- **Terminal Tools: Delete Terminal** - Clean up unused terminals
+- **Terminal Tools: Cancel Command** - Stop running processes
 
-- Terminal names are not persisted across VS Code sessions
-- Renaming terminals doesn't update the actual terminal tab name in VS Code
+## ⚙️ Configuration
 
-## Release Notes
+The extension works out of the box with no configuration required. When using the tools:
 
-### 0.0.1
+- **Terminal Name**: Choose descriptive names that match your workflow
+- **Working Directory**: Optionally specify where commands should run
+- **Shell Path**: Use custom shells if needed (defaults to system shell)
 
-Initial release with GitHub Copilot language model tools integration:
-- Automatic tool registration with Copilot
-- Natural language terminal management
-- Create, list, rename, delete named terminals
-- Send commands to specific terminals
-- Chat participant for direct interaction
+## 🔄 How It Works
 
-## Development
+1. **AI Request**: Copilot or other AI wants to run a command
+2. **Tool Selection**: Extension provides the `sendCommand` tool instead of generic terminal access
+3. **Terminal Resolution**: 
+   - If named terminal exists → Use it
+   - If not → Create it automatically
+4. **Command Execution**: Run the command in the appropriate terminal
+5. **Output Handling**: Capture and return results to the AI
 
-To run this extension in development:
+## 🤝 Contributing
 
-1. Clone the repository
-2. Run `npm install`
-3. Press `F5` to open a new Extension Development Host window
-4. Test the tools with GitHub Copilot chat
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute to this project.
 
-## Contributing
+### Development Setup
 
-Feel free to submit issues and enhancement requests!
+```bash
+# Clone the repository
+git clone https://github.com/mijur/vsc-terminal-tools.git
+cd vsc-terminal-tools
+
+# Install dependencies
+npm install
+
+# Start development
+npm run watch
+```
+
+### Testing
+
+```bash
+# Run tests
+npm test
+
+# Watch mode for development
+npm run watch-tests
+```
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🐛 Issues & Support
+
+- **Bug Reports**: [GitHub Issues](https://github.com/mijur/vsc-terminal-tools/issues)
+- **Feature Requests**: [GitHub Discussions](https://github.com/mijur/vsc-terminal-tools/discussions)
+- **Documentation**: [Wiki](https://github.com/mijur/vsc-terminal-tools/wiki)
+
+## 🔗 Related
+
+- [GitHub Copilot](https://copilot.github.com/) - AI pair programmer
+- [VS Code API](https://code.visualstudio.com/api) - Extension development docs
 
 ---
 
-**Made with ❤️ for the VS Code and GitHub Copilot community**
+**Made with ❤️ for developers who want organized, efficient AI-assisted workflows**
