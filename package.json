@@ -20,7 +20,8 @@
     "copilot",
     "github",
     "tools",
-    "management",
+    "languageModelTools",
+    "productivity",
     "ai",
     "chat"
   ],
@@ -36,6 +37,14 @@
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "terminal-tools.initialize",
+        "title": "Terminal Tools: Initialize Shell Integration"
+      },
+      {
+        "command": "terminal-tools.resetShellIntegrationPrompt",
+        "title": "Terminal Tools: Reset Shell Integration Prompt"
+      },
       {
         "command": "terminal-tools.listTerminals",
         "title": "Terminal Tools: List Named Terminals"
