@@ -2,8 +2,9 @@ import * as vscode from 'vscode';
 
 const DONT_PROMPT_KEY = 'terminal-tools.dontPromptShellIntegration';
 
-
 export async function ensureShellIntegration(context: vscode.ExtensionContext) {
+	console.log('Ensuring shell integration is on...');
+
     await enforceShellIntegration(context);
 
     const configWatcher = vscode.workspace.onDidChangeConfiguration(async (event) => {
@@ -19,6 +20,7 @@ export async function ensureShellIntegration(context: vscode.ExtensionContext) {
             vscode.window.showInformationMessage(
                 'Shell integration prompts have been re-enabled. You will be prompted again if needed.'
             );
+            await enableShellIntegration();
         }
     );
 
@@ -32,46 +34,60 @@ async function enforceShellIntegration(context: vscode.ExtensionContext): Promis
 
     if (!isEnabled && !dontPrompt) {
         const action = await vscode.window.showWarningMessage(
-            'Your Extension Name requires terminal shell integration to be enabled for full functionality.',
+            'Copilot Terminal Tools requires terminal shell integration for full functionality.',
             {
                 modal: false,
                 detail: 'Shell integration enables enhanced terminal features like command detection, history, and decorations.'
             },
-            'Enable Automatically',
-            'Enable Manually',
-            'Continue Without',
-            'Never Show Again'
+            'Turn On',
+            'Manual',
+            'Ignore'
         );
 
         switch (action) {
-            case 'Enable Automatically':
+            case 'Turn On':
                 return await enableShellIntegration();
-            case 'Enable Manually':
+            case 'Manual':
                 showManualInstructions();
                 return false;
-            case 'Continue Without':
-                vscode.window.showWarningMessage(
-                    'Some features may not work correctly without shell integration. ' +
-                    'You can enable it later via the Command Palette: "Enable Shell Integration"'
-                );
-                return false;
-            case 'Never Show Again':
-                await context.globalState.update(DONT_PROMPT_KEY, true);
-                vscode.window.showInformationMessage(
-                    'Shell integration prompts disabled. You can re-enable prompts via Command Palette: "Reset Shell Integration Prompt"'
-                );
+            case 'Ignore':
+                showIgnoreMessage(context);
                 return false;
             default:
                 return false;
         }
+    }
+    
+    if (isEnabled) {
+        console.log('Shell integration is enabled.');
     }
 
     if (!isEnabled && dontPrompt) {
         console.log('Shell integration is disabled, but user chose not to be prompted.');
         return false;
     }
-
     return isEnabled;
+}
+
+function showIgnoreMessage(context: vscode.ExtensionContext) {
+    vscode.window.showWarningMessage(
+        'Some features may not work correctly without shell integration. You can enable it later via the Command Palette: "Enable Shell Integration"',
+        'Do not show again'
+    ).then(async (selection) => {
+        if (selection === 'Do not show again') {
+            await context.globalState.update(DONT_PROMPT_KEY, true);
+            vscode.window.showInformationMessage(
+                'Shell integration prompts disabled. You can re-enable prompts via Command Palette: "Reset Shell Integration Prompt"',
+                'Undo'
+                ).then(async(selection) => {
+                    if (selection === 'Undo') {
+                        await context.globalState.update(DONT_PROMPT_KEY, false);
+                    }
+                }
+            );
+        }
+    }
+    );
 }
 
 async function enableShellIntegration(): Promise<boolean> {
@@ -93,12 +109,12 @@ async function enableShellIntegration(): Promise<boolean> {
     } catch (error) {
         vscode.window.showErrorMessage(
             'Failed to enable shell integration. Please enable it manually in VS Code settings.',
-            'Open Settings'
+            'Settings'
         ).then(selection => {
-            if (selection === 'Open Settings') {
+            if (selection === 'Settings') {
                 vscode.commands.executeCommand(
                     'workbench.action.openSettings',
-                    'terminal.integrated.shellIntegration.enabled'
+                    '@id:terminal.integrated.shellIntegration.enabled'
                 );
             }
         });
@@ -109,15 +125,15 @@ async function enableShellIntegration(): Promise<boolean> {
 function showManualInstructions() {
     vscode.window.showInformationMessage(
         'To enable shell integration manually:\n' +
-        '1. Open VS Code Settings (Ctrl+,)\n' +
-        '2. Search for "shell integration"\n' +
-        '3. Enable "Terminal › Integrated › Shell Integration: Enabled"',
-        'Open Settings'
+        ' -> Open VS Code Settings (Ctrl+,)\n' +
+        ' -> Search for "shell integration"\n' +
+        ' -> Enable "Terminal › Integrated › Shell Integration: Enabled"',
+        'Settings'
     ).then(selection => {
-        if (selection === 'Open Settings') {
+        if (selection === 'Settings') {
             vscode.commands.executeCommand(
                 'workbench.action.openSettings',
-                'terminal.integrated.shellIntegration.enabled'
+                '@id:terminal.integrated.shellIntegration.enabled'
             );
         }
     });
