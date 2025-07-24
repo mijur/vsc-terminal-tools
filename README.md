@@ -1,11 +1,11 @@
 
-<p align="center">
-  <a href="https://coff.ee/mijur" target="_blank">
+
+<div style="display: flex; align-items: center; justify-content: space-between;">
+  <h1 style="margin: 0;">Copilot Terminal Tools</h1>
+  <a href="https://coff.ee/mijur" target="_blank" style="margin-left: 1em;">
     <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-%23FFDD00.svg?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee">
   </a>
-</p>
-
-# Copilot Terminal Tools
+</div>
 
 A VS Code extension that provides intelligent terminal management for GitHub Copilot and AI assistants. The primary benefit is **preventing terminal spawning chaos** - instead of creating new terminals for every command, this extension allows AI agents to reuse named terminals, maintaining clean workspace organization and process continuity.
 
